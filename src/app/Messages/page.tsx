@@ -11,6 +11,7 @@ import {
   Star,
   Clock,
   CheckCheck,
+  MessageCircle,
 } from "lucide-react";
 
 const MessagesPage: React.FC = () => {
@@ -142,9 +143,10 @@ const MessagesPage: React.FC = () => {
       handleSendMessage();
     }
   };
+//   h-[calc(100vh-12rem)]
 
   return (
-    <div className="h-[calc(100vh-12rem)] bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="h-screen bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="flex h-full">
         {/* Conversations Sidebar */}
         <div className="w-80 border-r border-gray-100 flex flex-col">
@@ -329,18 +331,18 @@ const MessagesPage: React.FC = () => {
 
               {/* Message Input */}
               <div className="p-4 border-t border-gray-100 bg-gray-50">
-                <div className="flex items-end space-x-3">
+                <div className="flex items-center space-x-3">
                   <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                     <Paperclip className="h-4 w-4" />
                   </button>
 
-                  <div className="flex-1">
+                  <div className="flex-1 ">
                     <textarea
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="Type your message..."
-                      className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 resize-none"
+                      className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 resize-none "
                       rows={1}
                     />
                   </div>
