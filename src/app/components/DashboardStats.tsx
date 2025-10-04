@@ -1,3 +1,6 @@
+
+// toggle theme func
+
 "use client";
 
 import React from "react";
@@ -62,15 +65,14 @@ const DashboardStats: React.FC = () => {
             className={`relative bg-gradient-to-br ${stat.bgGradient} rounded-2xl p-4 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group overflow-hidden`}
           >
             {/* Background Pattern */}
-            {/* <div className="absolute top-0 right-0 w-20 h-20 opacity-10"></div> */}
 
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-0">
                 <div>
-                  <p className="text-sm font-medium text-gray-600 mb-1">
+                  <p className="text-sm font-medium text-gray-600 dark:text-black mb-1">
                     {stat.name}
                   </p>
-                  <p className="text-3xl font-bold text-gray-900">
+                  <p className="text-3xl font-bold text-gray-900 dark:text-black ">
                     {stat.value}
                   </p>
                 </div>

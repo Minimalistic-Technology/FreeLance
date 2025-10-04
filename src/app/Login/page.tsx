@@ -69,16 +69,36 @@ const LoginPage: React.FC<LoginPageProps> = ({ onBackToHome }) => {
 
     setIsLoading(true);
     setTimeout(() => {
-      const mockUser = {
-        id: Math.random().toString(36).substr(2, 9),
-        fullName: "John Doe",
-        email: formData.email,
-        profilePicture: undefined,
-      };
-      login(mockUser);
+      const adminEmail = process.env.ADMIN_EMAIL ;
+      const adminPassword = process.env.ADMIN_PASSWORD ;
+
+      if (
+        formData.email === adminEmail &&
+        formData.password === adminPassword
+      ) {
+        // Admin login: redirect to AdminDashboard
+        const adminUser = {
+          id: "admin_" + Math.random().toString(36).substr(2, 9),
+          fullName: "Admin",
+          email: formData.email,
+          profilePicture: undefined,
+          isAdmin: true, // Add isAdmin flag for admin role
+        };
+        login(adminUser);
+        router.push("/adminDashboard"); // Assuming /admin is the route for AdminDashboard
+      } else {
+        // Regular user login (mock)
+        const mockUser = {
+          id: Math.random().toString(36).substr(2, 9),
+          fullName: "John Doe",
+          email: formData.email,
+          profilePicture: undefined,
+        };
+        login(mockUser);
+      }
       setIsLoading(false);
       onBackToHome();
-    }, 1000);
+    }, 10000);
   };
 
   return (
@@ -105,16 +125,16 @@ const LoginPage: React.FC<LoginPageProps> = ({ onBackToHome }) => {
                   placeholder="your.email@example.com"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+                  className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 text-black ${
                     errors.email
                       ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
                       : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"
                   }`}
                 />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-                )}
               </div>
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+              )}
             </div>
 
             <div>
@@ -130,7 +150,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onBackToHome }) => {
                   onChange={(e) =>
                     handleInputChange("password", e.target.value)
                   }
-                  className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 ${
+                  className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-200  text-black ${
                     errors.password
                       ? "border-red-500 focus:ring-red-500/20 focus:border-red-500"
                       : "border-gray-200 focus:ring-blue-500/20 focus:border-blue-500"
@@ -171,6 +191,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onBackToHome }) => {
 
             <button
               type="submit"
+              /* !! (double negation): Coerces value to boolean (true/false) by inverting twice.
+               !!"" (empty str) -> false (no error); !!"error" (non-empty) -> true (has error).
+               Ensures disabled prop gets explicit boolean, avoiding React warnings.*/
               disabled={isLoading || !!errors.email || !!errors.password}
               className="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300 font-medium transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >

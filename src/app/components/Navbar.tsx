@@ -13,9 +13,11 @@ import {
   Settings,
   LogOut,
   MessageCircle,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 /* Purpose: Defines a TypeScript interface NavbarProps to specify the props expected by the Navbar component.
 
@@ -50,6 +52,7 @@ const Navbar: React.FC<NavbarProps> = ({
   onShowLogin,
 }) => {
   const { isAuthenticated, user, logout } = useAuth();
+  const { theme, setTheme } = useTheme();
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -94,20 +97,26 @@ const Navbar: React.FC<NavbarProps> = ({
     setIsProfileDropdownOpen(false);
   };
 
-  const router = useRouter()
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
+  const isDark = theme === "dark";
 
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-64 md:flex-col">
-        <div className="flex flex-col flex-grow bg-white/95 backdrop-blur-md border-r border-gray-200/50 shadow-sm">
+      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-64 md:flex-col ">
+        {/*  bg-white/95*/}
+        <div className="flex flex-col flex-grow dark:bg-[#3B3F42]
+         backdrop-blur-md border-r border-gray-200/50 shadow-sm">
           {/* Logo */}
           <div className="flex items-center px-6 py-6 border-b border-gray-200/50">
             <div className="flex items-center group">
               <div className="p-2 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300">
                 <Briefcase className="h-6 w-6 text-white" />
               </div>
-              <span className="ml-3 text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <span className="ml-3 text-xl font-bold  bg-clip-text ">
                 FreelanceHub
               </span>
             </div>
@@ -147,7 +156,7 @@ const Navbar: React.FC<NavbarProps> = ({
                   className={`w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 group ${
                     activeSection === item.key
                       ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                      : "text-gray-400 hover:text-gray-900 hover:bg-gray-50"
                   }`}
                 >
                   <Icon className="h-5 w-5 mr-3 flex-shrink-0" />
@@ -159,9 +168,24 @@ const Navbar: React.FC<NavbarProps> = ({
 
           {/* Bottom Section */}
           <div className="px-6 py-4 border-t border-gray-200/50">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="w-full flex items-center px-4 py-3 mb-2 text-gray-400 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+            >
+              {isDark ? (
+                <Sun className="h-5 w-5 mr-3 flex-shrink-0" />
+              ) : (
+                <Moon className="h-5 w-5 mr-3 flex-shrink-0" />
+              )}
+              <span className="text-sm font-medium">
+                {isDark ? "Light Mode" : "Dark Mode"}
+              </span>
+            </button>
+
             {/* Notifications */}
             <button
-              className="w-full flex items-center px-4 py-3 mb-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+              className="w-full flex items-center px-4 py-3 mb-2 text-gray-400 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
               onClick={() => setActiveSection("notification")}
             >
               <Bell className="h-5 w-5 mr-3 flex-shrink-0" />
@@ -171,7 +195,7 @@ const Navbar: React.FC<NavbarProps> = ({
 
             {/* Messages */}
             <button
-              className="w-full flex items-center px-4 py-3 mb-4 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
+              className="w-full flex items-center px-4 py-3 mb-4 text-gray-400 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-all duration-200 group"
               onClick={() => setActiveSection("messages")}
             >
               <MessageCircle className="h-5 w-5 mr-3 flex-shrink-0" />
@@ -201,10 +225,10 @@ const Navbar: React.FC<NavbarProps> = ({
                     )}
                   </div>
                   <div className="ml-3 flex-1 text-left">
-                    <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                    <p className="text-sm font-medium text-gray-400 group-hover:text-gray-900">
                       {user?.fullName?.split(" ")[0] || "User"}
                     </p>
-                    <p className="text-xs text-gray-500 truncate">
+                    <p className="text-xs text-gray-400 truncate">
                       {user?.email}
                     </p>
                   </div>
@@ -216,17 +240,17 @@ const Navbar: React.FC<NavbarProps> = ({
                     <div className="py-1">
                       <button
                         onClick={handleViewProfile}
-                        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="w-full flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-50 transition-colors"
                       >
                         <User className="h-4 w-4 mr-3" />
                         View Profile
                       </button>
-                      <button className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                      <button className="w-full flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-50 transition-colors">
                         <Settings className="h-4 w-4 mr-3" />
                         Settings
                       </button>
                       <button
-                        className="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="w-full flex items-center px-4 py-2 text-sm text-gray-400 hover:bg-gray-50 transition-colors"
                         onClick={() => setActiveSection("messages")}
                       >
                         <Mail className="h-4 w-4 mr-3" />
@@ -251,7 +275,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <div className="space-y-2">
                 <button
                   onClick={onShowLogin}
-                  className="w-full px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all duration-200"
+                  className="w-full px-4 py-2.5 text-sm font-medium text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all duration-200"
                 >
                   Sign In
                 </button>
@@ -283,6 +307,18 @@ const Navbar: React.FC<NavbarProps> = ({
 
             {/* Mobile Actions */}
             <div className="flex items-center space-x-2">
+              {/* Theme Toggle Button */}
+              <button
+                onClick={toggleTheme}
+                className="relative p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200"
+              >
+                {isDark ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </button>
+
               {/* Notifications */}
               <button className="relative p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200">
                 <Bell className="h-5 w-5" />
@@ -434,79 +470,3 @@ Visual Feedback:
 
 The UI updates to show the HireSection content, and the "Hire Talent" button is visually active, providing clear feedback to the user.
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

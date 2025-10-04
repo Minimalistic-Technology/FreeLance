@@ -1,76 +1,21 @@
+// //  try toggle theme logic 
+
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import React, { ReactNode } from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-interface ThemeContextType {
-  isDark: boolean;
-  toggleTheme: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
-  }
-  return context;
-};
-
-interface ThemeProviderProps {
-  children: ReactNode;
-}
-
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    // Check for saved theme preference or default to light mode
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      setIsDark(savedTheme === "dark");
-    }
-  }, []);
-
-  useEffect(() => {
-    // Apply theme to document
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDark]);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-  };
-
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="light" // Defaults to light; change to "system" if you want OS preference
+      enableSystem={false} // Disable system sync if not needed; set to true for OS dark mode support
+      storageKey="theme" // Matches your localStorage key
+    >
       {children}
-    </ThemeContext.Provider>
+    </NextThemesProvider>
   );
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// No need for custom useTheme; we'll import { useTheme } from 'next-themes' directly in components
