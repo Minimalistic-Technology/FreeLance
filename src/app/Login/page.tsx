@@ -69,8 +69,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onBackToHome }) => {
 
     setIsLoading(true);
     setTimeout(() => {
-      const adminEmail = process.env.ADMIN_EMAIL ;
-      const adminPassword = process.env.ADMIN_PASSWORD ;
+      const adminEmail = "admin@example.com";
+      const adminPassword = "Admin@1234";
 
       if (
         formData.email === adminEmail &&
